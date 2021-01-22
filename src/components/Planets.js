@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import {useQuery, useInfiniteQuery } from 'react-query';
+import {useQuery} from 'react-query';
 import Planet from './Planet';
+import SkeletonList from '../skeletons/SkeletonList'
 
 const fetchPlanets = async (page) => {
     const res = await fetch(`http://swapi.dev/api/planets/?page=${page}`);
@@ -13,12 +14,14 @@ const Planets = () => {
     const {data, isLoading, error, isPreviousData } = useQuery(['planets', page], () => fetchPlanets(page), {
         keepPreviousData:true,
     });
+    console.log('🎄',data, isLoading, error, isPreviousData)
         // https://react-query.tanstack.com/guides/paginated-queries#better-paginated-queries-with-keeppreviousdata
     return (
         <div>
             <h2>Planets</h2>
+            <SkeletonList theme="dark"/>
 
-            {isLoading && (<div>Loading data...</div>)}
+            {isLoading && (<SkeletonList theme="dark"/>)}
             {error && (<div>Error fetching data</div>)}
 
             { (error === null) && (
